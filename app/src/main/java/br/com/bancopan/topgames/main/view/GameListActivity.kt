@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import android.widget.Toast
 import br.com.bancopan.topgames.R
 import br.com.bancopan.topgames.databinding.ActivityGamesBinding
 import br.com.bancopan.topgames.main.adapter.GameAdapter
@@ -49,7 +50,6 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
     private fun configureUI() {
         gameAdapter = GameAdapter(this)
         val layoutManager = GridLayoutManager(this, 3)
-
         binding!!.recyclerView.layoutManager = layoutManager
         binding!!.recyclerView.adapter = gameAdapter
 
@@ -68,6 +68,9 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
     private fun configureObservers() {
         viewModel!!.games.observe(this, Observer {
                 games -> gameAdapter!!.addDataToList(games!!) }
+        )
+        viewModel!!.serviceFailure.observe(this, Observer {
+             Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_LONG).show() }
         )
     }
 

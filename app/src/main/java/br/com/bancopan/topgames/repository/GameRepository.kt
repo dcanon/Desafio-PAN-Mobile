@@ -44,6 +44,9 @@ class GameRepository(val gameDao: GameDao, val api: Api) {
     @SuppressLint("CheckResult")
     private fun getDataFromDb() {
         gameDao.findAll()
+                .doOnError {
+                    listener?.onDataFailure()
+                }
                 .subscribe {
                     if (it.isValid && it.isNotEmpty()) {
                         Timber.d("Loaded ${it.size} games from Db")
