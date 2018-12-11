@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TopGames</string>
+    <string name="service_error">Falha no carregamento dos dados./nArraste para baixo para tentar novamente </string>
+    <string name="network_failure">Nao foi possivel fazer o download dos games. Por favor verifique sua conexao com a Internet </string>
 </resources>

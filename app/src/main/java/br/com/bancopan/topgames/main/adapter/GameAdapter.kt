@@ -3,7 +3,6 @@ package br.com.bancopan.topgames.main.adapter
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import br.com.bancopan.topgames.R
 import br.com.bancopan.topgames.databinding.ItemGameBinding
