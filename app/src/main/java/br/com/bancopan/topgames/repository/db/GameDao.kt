@@ -10,10 +10,10 @@ import timber.log.Timber
 
 class GameDao(val realm: Realm) {
 
-    fun findAll() : Flowable<RealmResults<Game>> {
+    fun findAll(): Flowable<RealmResults<Game>> {
         return realm.where<Game>()
-            .findAll()
-            .asFlowable()
+                .findAll()
+                .asFlowable()
     }
 
     fun addAll(games: List<Game>) {

@@ -38,18 +38,18 @@ class GameRepository(val gameDao: GameDao, val api: Api) {
                 getDataFromDb()
             }
         }
+
     }
 
     @SuppressLint("CheckResult")
     private fun getDataFromDb() {
         gameDao.findAll()
-            .subscribe {
-                Timber.d("Loaded ${it.size} games from Db")
-                listener?.onDataSuccess(
-                    Realm.getDefaultInstance()
-                        .copyFromRealm(it)
-                )
-            }
+                .subscribe {
+                    if (it.isValid && it.isNotEmpty()) {
+                        Timber.d("Loaded ${it.size} games from Db")
+                        listener?.onDataSuccess(Realm.getDefaultInstance().copyFromRealm(it))
+                    }
+                }
     }
 
     private fun storeGamesInDb(games: List<Game>) {
