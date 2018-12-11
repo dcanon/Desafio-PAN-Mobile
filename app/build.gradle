@@ -56,9 +56,14 @@ def okhttpLoggingVersion = '3.10.0'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
+
+    // Tests
+    testImplementation 'com.nhaarman:mockito-kotlin:1.1.0'
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+
 
     // Android Framework
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
