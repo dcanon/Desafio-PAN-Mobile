@@ -3,14 +3,9 @@ package br.com.bancopan.topgames.main.listener
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 
-abstract class EndlessScrollListener : RecyclerView.OnScrollListener {
-    private var visibleThreshold = 5
+abstract class EndlessScrollListener(private var visibleThreshold: Int) : RecyclerView.OnScrollListener() {
     private var previousTotalItemCount = 0
     private var loading = true
-
-    constructor(visibleThreshold: Int) {
-        this.visibleThreshold = visibleThreshold
-    }
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)

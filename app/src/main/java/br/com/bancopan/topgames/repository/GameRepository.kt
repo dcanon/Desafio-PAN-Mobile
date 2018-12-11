@@ -31,7 +31,7 @@ class GameRepository(val gameDao: GameDao, val api: Api) {
                 val games = RepoUtils.buildGameList(response.top!!)
                 listener?.onDataSuccess(games)
                 totalItems = response.total!!
-                storeUsersInDb(games)
+                storeGamesInDb(games)
 
             } catch (e: Exception) {
                 listener?.onAPIFailure()
@@ -52,7 +52,7 @@ class GameRepository(val gameDao: GameDao, val api: Api) {
             }
     }
 
-    private fun storeUsersInDb(games: List<Game>) {
+    private fun storeGamesInDb(games: List<Game>) {
         gameDao.addAll(games)
     }
 
