@@ -31,28 +31,28 @@ class GameRepository(val gameDao: GameDao, val api: Api) {
                 val games = RepoUtils.buildGameList(response.top!!)
                 listener?.onDataSuccess(games)
                 totalItems = response.total!!
-                storeUsersInDb(games)
+                storeGamesInDb(games)
 
             } catch (e: Exception) {
                 listener?.onAPIFailure()
                 getDataFromDb()
             }
         }
+
     }
 
     @SuppressLint("CheckResult")
     private fun getDataFromDb() {
         gameDao.findAll()
-            .subscribe {
-                Timber.d("Loaded ${it.size} games from Db")
-                listener?.onDataSuccess(
-                    Realm.getDefaultInstance()
-                        .copyFromRealm(it)
-                )
-            }
+                .subscribe {
+                    if (it.isValid && it.isNotEmpty()) {
+                        Timber.d("Loaded ${it.size} games from Db")
+                        listener?.onDataSuccess(Realm.getDefaultInstance().copyFromRealm(it))
+                    }
+                }
     }
 
-    private fun storeUsersInDb(games: List<Game>) {
+    private fun storeGamesInDb(games: List<Game>) {
         gameDao.addAll(games)
     }
 
