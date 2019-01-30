@@ -8,29 +8,29 @@ import android.view.View
 import br.com.bancopan.topgames.App
 import br.com.bancopan.topgames.main.EndlessScrollHelper
 import br.com.bancopan.topgames.repository.GameRepository
-import br.com.bancopan.topgames.repository.RepositoryListener
 import br.com.bancopan.topgames.repository.data.Game
+import br.com.bancopan.topgames.repository.data.ServiceErrorModel
 
 import javax.inject.Inject
 
 import br.com.bancopan.topgames.utils.Constants.API_LIMIT
 import timber.log.Timber
 
-class GameListViewModel : ViewModel(), RepositoryListener {
+class GameListViewModel : ViewModel() {
     @Inject
     lateinit var repository: GameRepository
     var isLoading: ObservableBoolean
     var progressVisibility: ObservableInt
     var labelErrorVisibility: ObservableInt
-    var games: MutableLiveData<List<Game>>
-    var serviceFailure: MutableLiveData<Boolean>
+    var serviceSuccess: MutableLiveData<List<Game>>
+    var serviceFailure: MutableLiveData<ServiceErrorModel>
     val scrollHelper: EndlessScrollHelper
 
     init {
         isLoading = ObservableBoolean()
         progressVisibility = ObservableInt()
         labelErrorVisibility = ObservableInt()
-        games = MutableLiveData()
+        serviceSuccess = MutableLiveData()
         serviceFailure = MutableLiveData()
         scrollHelper = EndlessScrollHelper(API_LIMIT)
         App.instance.repositoryComponent.inject(this)
@@ -42,15 +42,9 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         progressVisibility.set(View.VISIBLE)
         labelErrorVisibility.set(View.GONE)
 
-        repository.serviceCall(scrollHelper.nextOffset,
-                {
-                    success -> applyOnModelResponse(success)
-                    println("")
-                    println("")
-                    println("")
-                },
-                { failure -> applyOnThrowableResponse(failure) }
-        )
+        repository.getTopGames(scrollHelper.nextOffset,
+                { success -> handleSuccess(success) },
+                { error -> handleError(error) })
 
     }
 
@@ -59,8 +53,8 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         requestData()
     }
 
-    fun applyOnModelResponse(response: List<Game>) {
-        games.postValue(response)
+    fun handleSuccess(response: List<Game>) {
+        serviceSuccess.postValue(response)
         configureUIForSuccess()
 
         if (scrollHelper.totalPages == 1) {
@@ -70,35 +64,11 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         scrollHelper.updatePageIndex()
     }
 
-    fun applyOnThrowableResponse(errorMessage: String) {
-        serviceFailure.postValue(false)
+    fun handleError(errorModel: ServiceErrorModel) {
+        serviceFailure.postValue(errorModel)
         scrollHelper.enable = false
         Timber.d("Failed to load data from cloud")
     }
-
-
-
-
-    //region interfaces
-    @Deprecated("")
-    override fun onDataSuccess(response: List<Game>) {
-
-    }
-
-    override fun onDataFailure() {
-        configureUIForError()
-        Timber.d("Failed to load data from Db")
-    }
-
-    override fun onAPIFailure() {
-
-    }
-
-    override fun onAPISuccess() {
-        scrollHelper.enable = true
-        Timber.d("onAPISuccess")
-    }
-    //endregion
 
     private fun configureUIForError() {
         progressVisibility.set(View.GONE)

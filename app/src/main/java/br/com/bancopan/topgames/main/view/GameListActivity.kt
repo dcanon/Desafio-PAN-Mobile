@@ -64,18 +64,21 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
     }
 
     private fun configureObservers() {
-        viewModel.games.observe(this, Observer {
-                games -> gameAdapter!!.addDataToList(games!!) }
-        )
-        viewModel.serviceFailure.observe(this, Observer {
-             Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_LONG).show() }
-        )
+        viewModel.serviceSuccess.observe(this, Observer { response ->
+            response?.let { gameAdapter.addDataToList(response) }
+        })
+
+        viewModel.serviceFailure.observe(this, Observer { response ->
+            response?.let {
+                Toast.makeText(this, response.errorMessage, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onItemClicked(view: View, Position: Int, game: Game) {
-        val fm = supportFragmentManager
-        val frag = GameDetailFragment.newInstance(game)
-        frag.show(fm, GameDetailFragment::class.java.simpleName)
+        GameDetailFragment
+                .newInstance(game)
+                .show(supportFragmentManager, GameDetailFragment::class.java.simpleName)
     }
 
 }
