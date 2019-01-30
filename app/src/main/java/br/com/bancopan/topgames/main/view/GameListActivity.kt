@@ -20,9 +20,9 @@ import br.com.bancopan.topgames.utils.Constants
 import timber.log.Timber
 
 class GameListActivity : AppCompatActivity(), GameAdapterListener {
-    private var viewModel: GameListViewModel? = null
-    private var binding: ActivityGamesBinding? = null
-    private var gameAdapter: GameAdapter? = null
+    private lateinit var viewModel: GameListViewModel
+    private lateinit var binding: ActivityGamesBinding
+    private var gameAdapter: GameAdapter = GameAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +34,8 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
         viewModel = ViewModelProviders.of(this).get(GameListViewModel::class.java)
         DataBindingUtil.setContentView<ViewDataBinding>(this, R.layout.activity_games)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_games)
-        binding!!.viewModel = viewModel
-        binding!!.setLifecycleOwner(this)
+        binding.viewModel = viewModel
+        binding.setLifecycleOwner(this)
 
         //Configure UI Elements
         configureUI()
@@ -44,20 +44,18 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
         configureObservers()
 
         // Provides first data
-        viewModel!!.requestData()
+        viewModel.requestData()
     }
 
     private fun configureUI() {
-        gameAdapter = GameAdapter(this)
-        val layoutManager = GridLayoutManager(this, 3)
-        binding!!.recyclerView.layoutManager = layoutManager
-        binding!!.recyclerView.adapter = gameAdapter
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
+        binding.recyclerView.adapter = gameAdapter
 
-        binding!!.recyclerView.addOnScrollListener(object : EndlessScrollListener(Constants.API_LIMIT) {
+        binding.recyclerView.addOnScrollListener(object : EndlessScrollListener(Constants.API_LIMIT) {
             override fun onLoadMore(): Boolean {
-                if (viewModel!!.scrollHelper.enable) {
+                if (viewModel.scrollHelper.enable) {
                     Timber.d("Requesting more data")
-                    viewModel!!.requestData()
+                    viewModel.requestData()
                 }
                 return true
             }
@@ -66,10 +64,10 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
     }
 
     private fun configureObservers() {
-        viewModel!!.games.observe(this, Observer {
+        viewModel.games.observe(this, Observer {
                 games -> gameAdapter!!.addDataToList(games!!) }
         )
-        viewModel!!.serviceFailure.observe(this, Observer {
+        viewModel.serviceFailure.observe(this, Observer {
              Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_LONG).show() }
         )
     }

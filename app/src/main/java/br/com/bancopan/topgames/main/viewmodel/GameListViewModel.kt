@@ -35,13 +35,23 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         scrollHelper = EndlessScrollHelper(API_LIMIT)
         App.instance.repositoryComponent.inject(this)
 
-        repository.listener = this
+//        repository.listener = this
     }
 
     fun requestData() {
-        repository.getTopGames(scrollHelper.nextOffset)
         progressVisibility.set(View.VISIBLE)
         labelErrorVisibility.set(View.GONE)
+
+        repository.serviceCall(scrollHelper.nextOffset,
+                {
+                    success -> applyOnModelResponse(success)
+                    println("")
+                    println("")
+                    println("")
+                },
+                { failure -> applyOnThrowableResponse(failure) }
+        )
+
     }
 
     fun onRefresh() {
@@ -49,7 +59,7 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         requestData()
     }
 
-    override fun onDataSuccess(response: List<Game>) {
+    fun applyOnModelResponse(response: List<Game>) {
         games.postValue(response)
         configureUIForSuccess()
 
@@ -60,21 +70,35 @@ class GameListViewModel : ViewModel(), RepositoryListener {
         scrollHelper.updatePageIndex()
     }
 
+    fun applyOnThrowableResponse(errorMessage: String) {
+        serviceFailure.postValue(false)
+        scrollHelper.enable = false
+        Timber.d("Failed to load data from cloud")
+    }
+
+
+
+
+    //region interfaces
+    @Deprecated("")
+    override fun onDataSuccess(response: List<Game>) {
+
+    }
+
     override fun onDataFailure() {
         configureUIForError()
         Timber.d("Failed to load data from Db")
     }
 
     override fun onAPIFailure() {
-        serviceFailure.postValue(false)
-        scrollHelper.enable = false
-        Timber.d("Failed to load data from cloud")
+
     }
 
     override fun onAPISuccess() {
         scrollHelper.enable = true
         Timber.d("onAPISuccess")
     }
+    //endregion
 
     private fun configureUIForError() {
         progressVisibility.set(View.GONE)
