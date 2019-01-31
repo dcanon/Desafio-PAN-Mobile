@@ -14,13 +14,13 @@ import br.com.bancopan.topgames.databinding.ActivityGamesBinding
 import br.com.bancopan.topgames.main.adapter.GameAdapter
 import br.com.bancopan.topgames.main.listener.EndlessScrollListener
 import br.com.bancopan.topgames.main.listener.GameAdapterListener
-import br.com.bancopan.topgames.main.viewmodel.GameListViewModel
+import br.com.bancopan.topgames.main.viewmodel.GameListVM
 import br.com.bancopan.topgames.repository.data.Game
 import br.com.bancopan.topgames.utils.Constants
 import timber.log.Timber
 
 class GameListActivity : AppCompatActivity(), GameAdapterListener {
-    private lateinit var viewModel: GameListViewModel
+    private lateinit var viewModel: GameListVM
     private lateinit var binding: ActivityGamesBinding
     private var gameAdapter: GameAdapter = GameAdapter(this)
 
@@ -31,7 +31,7 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
 
     private fun init() {
         // Configure Android DataBinding / ViewModel instance
-        viewModel = ViewModelProviders.of(this).get(GameListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(GameListVM::class.java)
         DataBindingUtil.setContentView<ViewDataBinding>(this, R.layout.activity_games)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_games)
         binding.viewModel = viewModel

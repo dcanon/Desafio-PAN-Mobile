@@ -8,7 +8,7 @@ import br.com.bancopan.topgames.R
 import br.com.bancopan.topgames.databinding.ItemGameBinding
 import br.com.bancopan.topgames.main.BindingHolder
 import br.com.bancopan.topgames.main.listener.GameAdapterListener
-import br.com.bancopan.topgames.main.viewmodel.TopViewModel
+import br.com.bancopan.topgames.main.viewmodel.TopVM
 import br.com.bancopan.topgames.repository.data.Game
 
 import java.util.ArrayList
@@ -25,7 +25,7 @@ class GameAdapter(private val listener: GameAdapterListener) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: BindingHolder, i: Int) {
-        holder.binding.viewModel = TopViewModel(games[i])
+        holder.binding.viewModel = TopVM(games[i])
         holder.binding.container.setOnClickListener { view -> listener.onItemClicked(view, i, games[i]) }
     }
 
