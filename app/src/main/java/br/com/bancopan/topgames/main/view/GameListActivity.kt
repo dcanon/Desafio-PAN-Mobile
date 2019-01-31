@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.Toast
 import br.com.bancopan.topgames.R
+import br.com.bancopan.topgames.core.CoreVMActivity
 import br.com.bancopan.topgames.databinding.ActivityGamesBinding
 import br.com.bancopan.topgames.main.adapter.GameAdapter
 import br.com.bancopan.topgames.main.listener.EndlessScrollListener
@@ -19,8 +20,8 @@ import br.com.bancopan.topgames.repository.data.Game
 import br.com.bancopan.topgames.utils.Constants
 import timber.log.Timber
 
-class GameListActivity : AppCompatActivity(), GameAdapterListener {
-    private lateinit var viewModel: GameListVM
+class GameListActivity : CoreVMActivity<GameListVM>(), GameAdapterListener {
+
     private lateinit var binding: ActivityGamesBinding
     private var gameAdapter: GameAdapter = GameAdapter(this)
 
@@ -31,11 +32,8 @@ class GameListActivity : AppCompatActivity(), GameAdapterListener {
 
     private fun init() {
         // Configure Android DataBinding / ViewModel instance
-        viewModel = ViewModelProviders.of(this).get(GameListVM::class.java)
-        DataBindingUtil.setContentView<ViewDataBinding>(this, R.layout.activity_games)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_games)
-        binding.viewModel = viewModel
-        binding.setLifecycleOwner(this)
+        setContentView(R.layout.activity_games, GameListVM::class.java)
+
 
         //Configure UI Elements
         configureUI()

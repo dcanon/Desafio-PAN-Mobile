@@ -6,6 +6,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.view.View
 import br.com.bancopan.topgames.App
+import br.com.bancopan.topgames.core.CoreVM
 import br.com.bancopan.topgames.main.EndlessScrollHelper
 import br.com.bancopan.topgames.repository.GameRepository
 import br.com.bancopan.topgames.repository.data.Game
@@ -16,7 +17,7 @@ import javax.inject.Inject
 import br.com.bancopan.topgames.utils.Constants.API_LIMIT
 import timber.log.Timber
 
-class GameListVM : ViewModel() {
+class GameListVM : CoreVM() {
     @Inject
     lateinit var repository: GameRepository
     var isLoading: ObservableBoolean
