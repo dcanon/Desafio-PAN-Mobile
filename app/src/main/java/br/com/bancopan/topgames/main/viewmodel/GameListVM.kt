@@ -1,7 +1,6 @@
 package br.com.bancopan.topgames.main.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.view.View
@@ -11,11 +10,9 @@ import br.com.bancopan.topgames.main.EndlessScrollHelper
 import br.com.bancopan.topgames.repository.GameRepository
 import br.com.bancopan.topgames.repository.data.Game
 import br.com.bancopan.topgames.repository.data.ServiceErrorModel
-
-import javax.inject.Inject
-
 import br.com.bancopan.topgames.utils.Constants.API_LIMIT
 import timber.log.Timber
+import javax.inject.Inject
 
 class GameListVM : CoreVM() {
     @Inject
