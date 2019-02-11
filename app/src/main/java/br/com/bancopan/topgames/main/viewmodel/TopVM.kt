@@ -3,7 +3,7 @@ package br.com.bancopan.topgames.main.viewmodel
 import android.arch.lifecycle.ViewModel
 import br.com.bancopan.topgames.repository.data.Game
 
-class TopViewModel(var game: Game) : ViewModel() {
+class TopVM(var game: Game) : ViewModel() {
 
     fun gameName(): String? {
         return game.name

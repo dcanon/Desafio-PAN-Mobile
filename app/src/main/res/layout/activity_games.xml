@@ -7,7 +7,7 @@
 
         <variable
                 name="viewModel"
-                type="br.com.bancopan.topgames.main.viewmodel.GameListViewModel"/>
+                type="br.com.bancopan.topgames.main.viewmodel.GameListVM"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
